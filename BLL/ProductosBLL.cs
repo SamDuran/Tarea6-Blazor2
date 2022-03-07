@@ -24,7 +24,7 @@ namespace BLL
             }
             return existe;
         }
-        private bool Guardar (Productos producto)
+        public bool Guardar (Productos producto)
         {
             if(Existe(producto.ProductoId))
                 return Modificar(producto);
@@ -37,7 +37,7 @@ namespace BLL
 
             try
             {
-                _contexto.Database.ExecuteSqlRaw($"Delete FROM ProductosDetalle where ProductoId={producto.ProductoId}");
+                _contexto.Database.ExecuteSqlRaw($"Delete FROM ProductoDetalles where ProductoId={producto.ProductoId}");
                 foreach(var anterior in producto.ProductoDetalles)
                 {
                     _contexto.Entry(anterior).State= EntityState.Added;

@@ -1,0 +1,99 @@
+﻿@page "/C_Productos"
+
+@using Entidades
+@using BLL
+@using Utilities
+@inject IToastService toastService
+
+<EditForm Model="lista">
+    <DataAnnotationsValidator/>
+
+    <div class="card" style="box-shadow: 8px 8px rgba(0, 0, 0, 0.26);">
+
+        <div class="card-header">
+            <h4 style="text-align: center;">Consulta de productos</h4>
+        </div>
+
+        <div class="card-body">
+            <form>
+                <div class="input-group d-flex align-items-end">
+
+                    <InputSelect class="form-control col-2" @bind-Value="filtro">
+                        <option value="0">ID</option>
+                        <option value="1">Descripcion</option>
+                    </InputSelect>
+
+                    <div class = "flex-fill mx-2">
+                        <label>Busqueda</label>
+                        <InputText class="form-control" @bind-Value="Criterio"/>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass mr-2" /> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered table-light">
+            <thead class="thead">
+                <tr class="table">
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Existencia</th>
+                    <th>Costo</th>
+                    <th>Valor Inventario</th>
+                    <th>Precio</th>
+                    <th>Ganancia</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lista)
+                {
+                    <tr>
+                        <td>@item.ProductoId</td>
+                        <td>@item.Descripcion</td>
+                        <td>@item.Existencia</td>
+                        <td>RD$@item.Costo</td>
+                        <td>RD$@item.ValorInventario</td>
+                        <td>RD$@item.Precio</td>
+                        <td>@item.Ganancia%</td>
+                        <td><a class="btn btn-sm btn-outline-primary oi oi-eye" href="R_Productos/@item.ProductoId"> Ver </a> </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</EditForm>
+
+@code {
+    public string filtro { get; set; }
+    public string Criterio {get; set;}
+    public List<Productos> lista { get; set; } = new List<Productos>();
+    
+    [Inject]
+    public ProductosBLL productosBLL { get; set; }
+
+    private void Buscar()
+    {
+        lista = new List<Productos>();
+        if(Criterio != null)
+        {
+            switch(filtro)
+            {
+                default:
+                case "0":
+                int ID = Utilities.ToInt(Criterio);
+                    lista=productosBLL.GetList(p => p.ProductoId == ID);
+                    @* lista=productosBLL.GetList(p => p.ProductoId == int.Parse(Criterio)); *@
+                    break;
+                case "1":
+                    lista=productosBLL.GetList(p => p.Descripcion.ToLower().Contains(Criterio.ToLower()));
+                    break;
+            }
+        }else
+        {
+            lista=productosBLL.GetList(p => true);
+        }
+    }
+}

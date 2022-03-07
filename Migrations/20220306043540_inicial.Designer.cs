@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Tarea6_Blazor2.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20220305045036_Inicial")]
-    partial class Inicial
+    [Migration("20220306043540_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,7 @@ namespace Tarea6_Blazor2.Migrations
                     b.Property<decimal>("Costo")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Descripción")
+                    b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

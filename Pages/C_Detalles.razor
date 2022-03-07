@@ -1,0 +1,95 @@
+@page "/C_Detalles"
+
+@using Entidades
+@using BLL
+@inject IToastService toastService
+
+<EditForm Model="producto">
+    <DataAnnotationsValidator />
+
+    <div class="card" style="box-shadow: 8px 8px rgba(0, 0, 0, 0.26);">
+
+        <div class="card-header">
+            <h4 style="text-align: center;">Consulta de productos por presentación</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form>
+                <div class="input-group d-flex align-items-end">
+
+                    <div class="flex-fill mx-2">
+                        <label>ID Producto</label>
+                        <InputText class="form-control" @bind-Value="Criterio" />
+                    </div>
+                    <div class="flex-fill mx-2">
+                        <label>Descripcion del producto</label>
+                        <InputText class="form-control" readonly @bind-Value="producto.Descripcion" />
+                    </div>
+
+                    <button type="button" class="btn btn-primary" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass mr-2" /> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <table class="table table-light" style="box-shadow: 1px 6px rgba(0, 0, 0, 0.2);">
+            <thead class="thead">
+                <tr class="table">
+                    <th>ProductoId</th>
+                    <th>Descripción</th>
+                    <th>Presentación</th>
+                    <th>Precio</th>
+                    <th>Existencia empaque</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in listaProductos)
+                {
+                    @foreach (var detalle in item.ProductoDetalles)
+                    {
+                        existenciaEmpaque = (int)((float)item.Existencia/(float)detalle.Cantidad);
+                        nombreProducto=item.Descripcion;
+                        <tr>
+                            <td>@detalle.ProductoId</td>
+                            <td>@nombreProducto</td>
+                            <td>@detalle.Descripcion</td>
+                            <td>@detalle.Precio</td>
+                            <td>@existenciaEmpaque</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+</EditForm>
+
+@code {
+    public Productos producto { get; set; } = new Productos();
+    private int existenciaEmpaque;
+    private string? nombreProducto;
+    public string Criterio;
+    public List<Productos> listaProductos { get; set; } = new List<Productos>();
+    [Inject]
+    public ProductosBLL? productosBLL { get; set; }
+
+    private void Buscar()
+    {
+        listaProductos = new List<Productos>();
+        if (Criterio != null)
+        {
+            producto = productosBLL.Buscar(Utilities.ToInt(Criterio));
+            if (producto != null)
+                listaProductos = productosBLL.GetList(p => p.ProductoId == Utilities.ToInt(Criterio));
+            else
+            {
+                toastService.ShowError("Debe indicar el ID de un producto existente.");
+            }
+        }
+        else
+        {
+            listaProductos = productosBLL.GetList(p => true);
+        }
+    }
+}

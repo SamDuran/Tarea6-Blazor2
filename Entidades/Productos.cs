@@ -9,7 +9,7 @@ namespace Entidades
         [Key]
         public int ProductoId { get; set; }
 
-        public string Descripción { get; set; }
+        public string Descripcion { get; set; }
 
         public decimal Existencia { get; set; }
 

@@ -17,5 +17,6 @@ namespace Entidades
             Cantidad = cantidad;
             Precio = precio;
         }
+        public ProductoDetalles(){}
     }
 }

@@ -4,7 +4,7 @@
 
 namespace Tarea6_Blazor2.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace Tarea6_Blazor2.Migrations
                 {
                     ProductoId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Descripción = table.Column<string>(type: "TEXT", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
                     Existencia = table.Column<decimal>(type: "TEXT", nullable: false),
                     Costo = table.Column<decimal>(type: "TEXT", nullable: false),
                     ValorInventario = table.Column<decimal>(type: "TEXT", nullable: false),

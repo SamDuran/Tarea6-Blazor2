@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Components.Web;
 using Tarea6_Blazor2.Data;
 using Entidades;
 using DAL;
+using BLL;
 using Microsoft.EntityFrameworkCore;
+using Blazored.Toast;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
+builder.Services.AddBlazoredToast();
+
 builder.Services.AddDbContext<Contexto>(options => 
-        options.UseSqlite(builder.Configuration.GetConnectionString("Connection"))
+        options.UseSqlite(builder.Configuration.GetConnectionString("ConStr"))
 );
+
+builder.Services.AddTransient<ProductosBLL>();
 
 var app = builder.Build();
 
